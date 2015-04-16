@@ -64,18 +64,18 @@ if dados_usuario['sexo'] == 'f':
         k = TMBf*1.725
     if dados_usuario['fator'] == 'muito alto':
         k = TMBf*1.9
-
+za = k
 
 #GRAFICO DAS CALORIAS NECESSARIAS
 import matplotlib.pyplot as plt
-caloriasnecessarias = [k]*7
-tempo = range(1,8)
-plt.plot(tempo, caloriasnecessarias)
-plt.axis([1,7,0,4000])
-plt.ylabel('calorias (kcal)')
-plt.xlabel('semana')
-plt.title('calorias recomendadas' )
-plt.show()
+#caloriasnecessarias = [k]*7
+#tempo = range(1,8)
+#plt.plot(tempo, caloriasnecessarias)
+#plt.axis([1,7,0,4000])
+#plt.ylabel('calorias (kcal)')
+#plt.xlabel('semana')
+#plt.title('calorias recomendadas' )
+#plt.show()
 
     
 
@@ -84,11 +84,19 @@ x = open('alimentos.csv', encoding='latin1')
 linhas_alimentos = x.readlines()
 
 
-#CONFIGURANDO O DICIONARIO DA DIETA DO USUARIO
-dieta_usuario = {} 
+#CONFIGURANDO O DICIONARIO DA DIETA DO USUARIO E A DATA
+dieta_usuario = {}
+data = {}
 for i in linhas[3:]:
     pedacos = i
     dieta_usuario[pedacos[1]] = pedacos[2]
+    if pedacos[0] in data:
+        data[pedacos[0]] += [pedacos[1]]
+    else:
+        data[pedacos[0]] = [pedacos[1]]
+print(data)
+print(' ' )
+print(dieta_usuario)
 
 
 
@@ -101,50 +109,87 @@ for e in linhas_alimentos[1:]:
     pedacos = s
     dados_alimentos = pedacos[1:]
     alimentos[pedacos[0]] = pedacos[1:]
+print(' ')
+#print(alimentos)
+
 
 
 
 
 #CONFIGUANDO: CALORIAS, PROTENIAS, CARBOIDRADOS E GORDURAS
+k = 0
 calorias = []
-for e in alimentos.keys():
-    if e in dieta_usuario:
-        c = (float(dieta_usuario[e])*float((alimentos[e][1])))/100
-        calorias.append(c)
-print(calorias)
+for e in data.keys():
+    for i in data[e]:
+        c = float(dieta_usuario[i])*float(alimentos[i][1])/100
+        k += c
+    calorias.append(k)
+    c = 0
+    k = 0
+print('calorias',calorias)
+
+        
+    
+    
 
 proteinas = []
-for e in alimentos.keys():
-    if e in dieta_usuario:
-        c = (float(dieta_usuario[e])*float((alimentos[e][2])))/100
-        proteinas.append(c)
-print(proteinas)
+k = 0
+for e in data.keys():
+
+    for i in data[e]:
+        c = float(dieta_usuario[i])*float(alimentos[i][2])/100
+        k += c
+    proteinas.append(k)
+    c = 0
+    k = 0
+print('proteinhas',proteinas)
+
 
 carboidratos = []
-for e in alimentos.keys():
-    if e in dieta_usuario:
-        c = (float(dieta_usuario[e])*float((alimentos[e][3])))/100
-        carboidratos.append(c)
-print(carboidratos)
+k = 0
+for e in data.keys():
+
+    for i in data[e]:
+        c = float(dieta_usuario[i])*float(alimentos[i][3])/100
+        k += c
+    carboidratos.append(k)
+    c = 0
+    k = 0
+print('carboidrato',carboidratos)
 
 
 gorduras = []
-for e in alimentos.keys():
-    if e in dieta_usuario:
-        c = (float(dieta_usuario[e])*float((alimentos[e][4])))/100
-        gorduras.append(c)
-print(gorduras)
+k = 0
+for e in data.keys():
+
+    for i in data[e]:
+        c = float(dieta_usuario[i])*float(alimentos[i][4])/100
+        k += c
+    gorduras.append(k)
+    c = 0
+    k = 0
+print('gorduras',gorduras)
 
 
 
-
-tempo = range(1,9)
+caloriasnecessarias = [za]*2
+tempo = range(2)
+plt.plot(tempo, caloriasnecessarias)
 plt.plot(tempo, calorias)
+plt.axis([0,6,0,4000])
+plt.ylabel('CALORIAS(Kcal): RECOMENDADAS [AZUL]  X  REAL [VERDE]')
+plt.xlabel('semana')
+plt.title('calorias recomendadas' )
+plt.show()
+
+
+
+tempo = range(2)
 plt.plot(tempo, proteinas)
 plt.plot(tempo, carboidratos)
 plt.plot(tempo, gorduras)
-plt.axis([1,8,0,440])
-plt.ylabel('calorias(kcal, proteinas(g), carboidratos(g), gordura(g))')
+plt.axis([0,6,0,200])
+plt.ylabel('PROTEINAS[AZUL]- CARBOIDRATOS[VERDE]- GORDURA[VERMELHO]')
 plt.xlabel('semana') 
 plt.title('quantidade consumida' )
 plt.show()
