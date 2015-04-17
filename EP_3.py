@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- codin  g: utf-8 -*-
 """
 Created on Fri Apr 10 17:55:13 2015
 
@@ -10,6 +10,10 @@ Created on Fri Apr 10 17:55:13 2015
 #ABRINDO O ARQUIVO CALORIAS
 a  = open('usuario.csv', encoding='utf-8')
 linhas = a.readlines()
+
+#ABRINDO O ARQUIVO ALIMENTOS
+x = open('alimentos.csv', encoding='latin1') 
+linhas_alimentos = x.readlines()
 
         
 #LIMPANDO O ARQUIVO
@@ -65,24 +69,9 @@ if dados_usuario['sexo'] == 'f':
     if dados_usuario['fator'] == 'muito alto':
         k = TMBf*1.9
 za = k
-
-#GRAFICO DAS CALORIAS NECESSARIAS
-import matplotlib.pyplot as plt
-#caloriasnecessarias = [k]*7
-#tempo = range(1,8)
-#plt.plot(tempo, caloriasnecessarias)
-#plt.axis([1,7,0,4000])
-#plt.ylabel('calorias (kcal)')
-#plt.xlabel('semana')
-#plt.title('calorias recomendadas' )
-#plt.show()
-
-    
-
-#ABRINDO O ARQUIVO ALIMENTOS
-x = open('alimentos.csv', encoding='latin1') 
-linhas_alimentos = x.readlines()
-
+print('calorias recomendadas', za)
+print(' ')
+print(' ')
 
 #CONFIGURANDO O DICIONARIO DA DIETA DO USUARIO E A DATA
 dieta_usuario = {}
@@ -94,9 +83,7 @@ for i in linhas[3:]:
         data[pedacos[0]] += [pedacos[1]]
     else:
         data[pedacos[0]] = [pedacos[1]]
-print(data)
-print(' ' )
-print(dieta_usuario)
+
 
 
 
@@ -109,17 +96,16 @@ for e in linhas_alimentos[1:]:
     pedacos = s
     dados_alimentos = pedacos[1:]
     alimentos[pedacos[0]] = pedacos[1:]
-print(' ')
-#print(alimentos)
-
-
-
 
 
 #CONFIGUANDO: CALORIAS, PROTENIAS, CARBOIDRADOS E GORDURAS
 k = 0
 calorias = []
-for e in data.keys():
+datas = list(data.keys())
+datas.sort()
+
+print('cosumo :')
+for e in datas:
     for i in data[e]:
         c = float(dieta_usuario[i])*float(alimentos[i][1])/100
         k += c
@@ -129,13 +115,9 @@ for e in data.keys():
 print('calorias',calorias)
 
         
-    
-    
-
 proteinas = []
 k = 0
-for e in data.keys():
-
+for e in datas:
     for i in data[e]:
         c = float(dieta_usuario[i])*float(alimentos[i][2])/100
         k += c
@@ -147,8 +129,7 @@ print('proteinhas',proteinas)
 
 carboidratos = []
 k = 0
-for e in data.keys():
-
+for e in datas:
     for i in data[e]:
         c = float(dieta_usuario[i])*float(alimentos[i][3])/100
         k += c
@@ -160,8 +141,7 @@ print('carboidrato',carboidratos)
 
 gorduras = []
 k = 0
-for e in data.keys():
-
+for e in datas:
     for i in data[e]:
         c = float(dieta_usuario[i])*float(alimentos[i][4])/100
         k += c
@@ -169,32 +149,46 @@ for e in data.keys():
     c = 0
     k = 0
 print('gorduras',gorduras)
+print(' ')
+
+#CONFIGURANDO O BMI
+BMI =  (1.3*float(dados_usuario['peso (kg)']))/float(dados_usuario['altura (m)'])
+if BMI> 18.5 and BMI<24.99:
+    print('voce esta saudavel, seu BMI eh de:',BMI)
+if BMI< 18.5:
+    print('voce esta abaixo do peso, seu BMI eh de:',BMI)
+if BMI>25 and BMI<24.99:
+    print('voce esta acima do peso, seu BMI eh de:',BMI)
+if BMI> 30:
+    print('voce esta obeso, seu BMI eh de:',BMI)
 
 
 
-caloriasnecessarias = [za]*2
-tempo = range(2)
+#CONFIGURANDO OS GRAFICOS
+import matplotlib.pyplot as plt
+
+caloriasnecessarias = [za]*len(data)
+tempo = range(len(data))
 plt.plot(tempo, caloriasnecessarias)
 plt.plot(tempo, calorias)
-plt.axis([0,6,0,4000])
-plt.ylabel('CALORIAS(Kcal): RECOMENDADAS [AZUL]  X  REAL [VERDE]')
-plt.xlabel('semana')
-plt.title('calorias recomendadas' )
+plt.ylabel('CALORIAS: RECOMENDADAS [AZUL]  X  REAL [VERDE]')
+plt.xlabel('dias')
+plt.xticks(range(len(datas)),datas)
+plt.title('calorias(Kcal)' )
 plt.show()
 
 
-
-tempo = range(2)
 plt.plot(tempo, proteinas)
 plt.plot(tempo, carboidratos)
 plt.plot(tempo, gorduras)
-plt.axis([0,6,0,200])
 plt.ylabel('PROTEINAS[AZUL]- CARBOIDRATOS[VERDE]- GORDURA[VERMELHO]')
+plt.xticks(range(len(datas)),datas)
 plt.xlabel('semana') 
-plt.title('quantidade consumida' )
+plt.title('quantidade consumida (g)' )
 plt.show()
         
-    
+
+
         
 
     
