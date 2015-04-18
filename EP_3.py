@@ -152,12 +152,12 @@ print('gorduras',gorduras)
 print(' ')
 
 #CONFIGURANDO O BMI
-BMI =  (1.3*float(dados_usuario['peso (kg)']))/float(dados_usuario['altura (m)'])
+BMI =  ((float(dados_usuario['peso (kg)']))/(float(dados_usuario['altura (m)']))**2)
 if BMI> 18.5 and BMI<24.99:
     print('voce esta saudavel, seu BMI eh de:',BMI)
 if BMI< 18.5:
     print('voce esta abaixo do peso, seu BMI eh de:',BMI)
-if BMI>25 and BMI<24.99:
+if BMI>25 and BMI<29.99:
     print('voce esta acima do peso, seu BMI eh de:',BMI)
 if BMI> 30:
     print('voce esta obeso, seu BMI eh de:',BMI)
